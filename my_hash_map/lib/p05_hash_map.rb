@@ -1,3 +1,4 @@
+require 'byebug'
 require_relative 'p04_linked_list'
 
 class HashMap
@@ -9,20 +10,35 @@ class HashMap
   end
 
   def include?(key)
+    mod = bucket(key)
+    @store[mod].include?(key)
   end
 
   def set(key, val)
+    mod = bucket(key)
+    if @store[mod].include?(key)
+      @store[mod].update(key, val)
+    else
+      @store[mod].append(key, val)
+      @count += 1
+    end
   end
 
   def get(key)
+    mod = bucket(key)
+    #debugger
+    @store[mod].get(key)# if @store[mod].include?(key)
   end
 
   def delete(key)
+    mod = bucket(key)
+    @store[mod].remove(key)
+    @count -= 1
   end
 
   def each
+    @store.inject([]) {|acc, el| acc << [el.key, el.val] }
   end
-
   # uncomment when you have Enumerable included
   # def to_s
   #   pairs = inject([]) do |strs, (k, v)|
@@ -44,6 +60,6 @@ class HashMap
   end
 
   def bucket(key)
-    # optional but useful; return the bucket corresponding to `key`
+    key.hash % num_buckets
   end
 end
