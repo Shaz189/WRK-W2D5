@@ -37,7 +37,7 @@ class HashMap
   end
 
   def each
-    @store.inject([]) {|acc, el| acc << [el.key, el.val] }
+    @store.each
   end
   # uncomment when you have Enumerable included
   # def to_s
